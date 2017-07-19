@@ -1,10 +1,10 @@
 # Laravel Uuid (Universally unique identifier)
 
-[![Total Downloads](https://poser.pugx.org/jeremykenedy/laravel-uuid/d/total.svg)](https://packagist.org/packages/jeremykenedy/laravel-uuid)
-[![Build Status](https://secure.travis-ci.org/jeremykenedy/laravel-uuid.png?branch=master)](http://travis-ci.org/jeremykenedy/laravel-uuid)
-[![Latest Stable Version](https://poser.pugx.org/jeremykenedy/laravel-uuid/v/stable.svg)](https://packagist.org/packages/jeremykenedy/laravel-uuid)
-[![Latest Unstable Version](https://poser.pugx.org/jeremykenedy/laravel-uuid/v/unstable.svg)](https://packagist.org/packages/jeremykenedy/laravel-uuid)
-[![License](https://poser.pugx.org/jeremykenedy/laravel-uuid/license.svg)](https://raw.githubusercontent.com/jeremykenedy/laravel-auth/LICENSE)
+[![Total Downloads](https://poser.pugx.org/jeremykenedy/uuid/d/total.svg)](https://packagist.org/packages/jeremykenedy/uuid)
+[![Build Status](https://secure.travis-ci.org/jeremykenedy/uuid.png?branch=master)](http://travis-ci.org/jeremykenedy/laravel-uuid)
+[![Latest Stable Version](https://poser.pugx.org/jeremykenedy/uuid/v/stable.svg)](https://packagist.org/packages/jeremykenedy/uuid)
+[![Latest Unstable Version](https://poser.pugx.org/jeremykenedy/uuid/v/unstable.svg)](https://packagist.org/packages/jeremykenedy/uuid)
+[![License](https://poser.pugx.org/jeremykenedy/uuid/license.svg)](https://raw.githubusercontent.com/jeremykenedy/laravel-auth/LICENSE)
 
 Laravel package to generate a UUID according to the RFC 4122 standard. UUID Versions 1, 3, 4 and 5 are supported. With MIT license.
 
@@ -38,7 +38,7 @@ Since Laravel `4.*` and `5.*` both rely on either `OpenSSL` or `Mcrypt`, the pse
 1. From your projects root folder in terminal run:
 
 ```bash
-    composer require jeremykenedy/laravel-uuid
+    composer require jeremykenedy/uuid
 ```
 
 2. Register the package with laravel in `config/app.php` under `aliases` with the following:
