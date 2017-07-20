@@ -121,7 +121,7 @@ dd($uuid->version);
 * Meaning `Uuid::nsDNS` is now `Uuid::NS_DNS` etc. Should be an easy fix.
 
 ### Credits
-* Full development credit must go to [webpatser](https://github.com/webpatser). This package was forked and modified to be compliant with [MIT](https://opensource.org/licenses/MIT) licencing standards for production use.
+* Full development credit must go to [webpatser](https://github.com/webpatser). This package was forked and modified to be compliant with [MIT](https://opensource.org/licenses/MIT) licensing standards for production use.
 
 ## License
 Laravel UUID is licensed under the MIT license for both personal and commercial products. Enjoy!
