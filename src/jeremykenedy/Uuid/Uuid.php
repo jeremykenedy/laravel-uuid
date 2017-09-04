@@ -4,6 +4,20 @@ namespace jeremykenedy\Uuid;
 
 use Exception;
 
+/**
+ * Class Uuid
+ * @package jeremykenedy\Uuid
+ *
+ * @property string $bytes
+ * @property string $hex
+ * @property string $node
+ * @property string $string
+ * @property string $time
+ * @property string $urn
+ * @property string $variant
+ * @property string $version
+ *
+ */
 class Uuid
 {
     const MD5 = 3;
@@ -95,18 +109,9 @@ class Uuid
     const NS_X500 = '6ba7b814-9dad-11d1-80b4-00c04fd430c8';
 
     /**
-     * @var string
+     * Regular expression for validation of UUID.
      */
-    protected static $randomFunc = 'randomMcrypt';
-
-    protected $bytes;
-    protected $hex;
-    protected $string;
-    protected $urn;
-    protected $version;
-    protected $variant;
-    protected $node;
-    protected $time;
+    const VALID_UUID_REGEX = '^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$';
 
     /**
      * @param string $uuid
@@ -220,29 +225,7 @@ class Uuid
      */
     public static function randomBytes($bytes)
     {
-        return call_user_func(array('static', static::initRandom()), $bytes);
-    }
-
-    /**
-     * Trying for php 7 secure random generator, falling back to openSSL and Mcrypt.
-     * If none of the above is found, falls back to mt_rand
-     * Since laravel 4.* and 5.0 requires Mcrypt and 5.1 requires OpenSSL the fallback should never be used.
-     *
-     * @throws Exception
-     * @return string
-     */
-    public static function initRandom()
-    {
-        if (function_exists('random_bytes')) {
-            return 'randomPhp7';
-        } elseif (function_exists('openssl_random_pseudo_bytes')) {
-            return 'randomOpenSSL';
-        } elseif (function_exists('mcrypt_encrypt')) {
-            return 'randomMcrypt';
-        }
-
-        // This is not the best randomizer (using mt_rand)...
-        return 'randomTwister';
+        return random_bytes($bytes);
     }
 
     /**
@@ -368,60 +351,6 @@ class Uuid
     }
 
     /**
-     * Get the specified number of random bytes, using random_bytes().
-     * Randomness is returned as a string of bytes
-     *
-     * Requires Php 7, or random_compact polyfill
-     *
-     * @param $bytes
-     * @return mixed
-     */
-    protected static function randomPhp7($bytes) {
-        return random_bytes($bytes);
-    }
-
-    /**
-     * Get the specified number of random bytes, using openssl_random_pseudo_bytes().
-     * Randomness is returned as a string of bytes.
-     *
-     * @param $bytes
-     * @return mixed
-     */
-    protected static function randomOpenSSL($bytes)
-    {
-        return openssl_random_pseudo_bytes($bytes);
-    }
-
-    /**
-     * Get the specified number of random bytes, using mcrypt_create_iv().
-     * Randomness is returned as a string of bytes.
-     *
-     * @param $bytes
-     * @return string
-     */
-    protected static function randomMcrypt($bytes)
-    {
-        return mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM);
-    }
-
-    /**
-     * Get the specified number of random bytes, using mt_rand().
-     * Randomness is returned as a string of bytes.
-     *
-     * @param integer $bytes
-     * @return string
-     */
-    protected static function randomTwister($bytes)
-    {
-        $rand = "";
-        for ($a = 0; $a < $bytes; $a++) {
-            $rand .= chr(mt_rand(0, 255));
-        }
-
-        return $rand;
-    }
-
-    /**
      * @param string $var
      * @return string|string|number|number|number|number|number|NULL|number|NULL|NULL
      */
@@ -430,38 +359,20 @@ class Uuid
         switch ($var) {
             case "bytes":
                 return $this->bytes;
-            // no break
+                break;
             case "hex":
                 return bin2hex($this->bytes);
-            // no break
-            case "string":
-                return $this->__toString();
-            // no break
-            case "urn":
-                return "urn:uuid:" . $this->__toString();
-            // no break
-            case "version":
-                return ord($this->bytes[6]) >> 4;
-            // no break
-            case "variant":
-                $byte = ord($this->bytes[8]);
-                if ($byte >= static::VAR_RES) {
-                    return 3;
-                } elseif ($byte >= static::VAR_MS) {
-                    return 2;
-                } elseif ($byte >= static::VAR_RFC) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            // no break
+                break;
             case "node":
                 if (ord($this->bytes[6]) >> 4 == 1) {
                     return bin2hex(substr($this->bytes, 10));
                 } else {
                     return null;
                 }
-            // no break
+                break;
+            case "string":
+                return $this->__toString();
+                break;
             case "time":
                 if (ord($this->bytes[6]) >> 4 == 1) {
                     // Restore contiguous big-endian byte order
@@ -475,10 +386,28 @@ class Uuid
                 } else {
                     return null;
                 }
-            // no break
+                break;
+            case "urn":
+                return "urn:uuid:" . $this->__toString();
+                break;
+            case "variant":
+                $byte = ord($this->bytes[8]);
+                if ($byte >= static::VAR_RES) {
+                    return 3;
+                } elseif ($byte >= static::VAR_MS) {
+                    return 2;
+                } elseif ($byte >= static::VAR_RFC) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+                break;
+            case "version":
+                return ord($this->bytes[6]) >> 4;
+                break;
             default:
                 return null;
-            // no break
+                break;
         }
     }
 
@@ -490,5 +419,17 @@ class Uuid
     public function __toString()
     {
         return $this->string;
+    }
+
+    /**
+     * Import and validate an UUID
+     *
+     * @param Uuid|string $uuid
+     *
+     * @return boolean
+     */
+    public static function validate($uuid)
+    {
+        return (boolean) preg_match('~' . static::VALID_UUID_REGEX . '~', static::import($uuid)->string);
     }
 }

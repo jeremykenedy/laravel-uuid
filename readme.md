@@ -11,6 +11,8 @@ Laravel package to generate a UUID according to the RFC 4122 standard. UUID Vers
 - [About](#about)
 - [Requirements](#requirements)
 - [Installation](#installation)
+    - [Laravel 5.5 and above](#laravel-5.5-and-above)
+    - [Laravel 5.4 and below](#laravel-5.4-and-below)
 - [Basic Usage](#basic-usage)
 - [Advanced Usage](#advanced-usage)
     - [UUID creation](#uuid-creation)
@@ -31,14 +33,24 @@ Laravel package to generate a UUID according to the RFC 4122 standard. UUID Vers
 Since Laravel `4.*` and `5.*` both rely on either `OpenSSL` or `Mcrypt`, the pseudo random byte generator now tries to use one of them. If both cannot be used (not a Laravel project?), the 'less random' `mt_rand()` function is used.
 
 ### Requirements
-* [Laravel 5.3, 5.4 or newer](https://laravel.com/docs/installation)
+* [Laravel 5.3, 5.4 or 5.5+](https://laravel.com/docs/installation)
 
 ### Installation
 
+##### Laravel 5.5 and above
 1. From your projects root folder in terminal run:
 
 ```bash
     composer require jeremykenedy/uuid
+```
+
+* Uses package auto discovery feature, no need to edit the `config/app.php` file.
+
+##### Laravel 5.4 and below
+1. From your projects root folder in terminal run:
+
+```bash
+    composer require jeremykenedy/uuid:2.1.2
 ```
 
 2. Register the package with laravel in `config/app.php` under `aliases` with the following:
