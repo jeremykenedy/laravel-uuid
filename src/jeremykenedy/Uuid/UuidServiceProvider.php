@@ -2,8 +2,8 @@
 
 namespace jeremykenedy\Uuid;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\ServiceProvider;
 
 class UuidServiceProvider extends ServiceProvider
 {
