@@ -1,6 +1,7 @@
 # Laravel Uuid (Universally unique identifier)
 
 [![Total Downloads](https://poser.pugx.org/jeremykenedy/uuid/d/total.svg)](https://packagist.org/packages/jeremykenedy/uuid)
+[![StyleCI](https://github.styleci.io/repos/97753869/shield?branch=master)](https://github.styleci.io/repos/97753869)
 [![Build Status](https://travis-ci.org/jeremykenedy/laravel-uuid.svg?branch=master)](http://travis-ci.org/jeremykenedy/laravel-uuid)
 [![Latest Stable Version](https://poser.pugx.org/jeremykenedy/uuid/v/stable.svg)](https://packagist.org/packages/jeremykenedy/uuid)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
