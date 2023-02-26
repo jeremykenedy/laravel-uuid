@@ -95,7 +95,7 @@ class Uuid
      *
      * @var int
      */
-    const INTERVAL = 0x01b21dd213814000;
+    const INTERVAL = 0x01B21DD213814000;
 
     /**
      * @var string
