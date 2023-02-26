@@ -33,7 +33,7 @@ Laravel package to generate a UUID according to the RFC 4122 standard. UUID Vers
 Since Laravel `4.*` and `5.*` both rely on either `OpenSSL` or `Mcrypt`, the pseudo random byte generator now tries to use one of them. If both cannot be used (not a Laravel project?), the 'less random' `mt_rand()` function is used.
 
 ### Requirements
-* [Laravel 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 6, 7+](https://laravel.com/docs/installation)
+* [Laravel 5.3 - 10](https://laravel.com/docs/installation)
 
 ### Installation
 
