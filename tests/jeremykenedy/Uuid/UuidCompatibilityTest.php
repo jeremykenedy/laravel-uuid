@@ -75,6 +75,21 @@ class UuidCompatibilityTest extends TestCase
         $this->assertTrue(Uuid::validate($value));
     }
 
+    public function testBinaryStringableInputKeepsItsOriginalByteValue()
+    {
+        $value = new class {
+            public function __toString()
+            {
+                return 'abcdefghijklmnop';
+            }
+        };
+        $uuid = Uuid::import($value);
+
+        $this->assertSame($value, $uuid->bytes);
+        $this->assertSame('61626364-6566-6768-696a-6b6c6d6e6f70', $uuid->string);
+        $this->assertTrue(Uuid::validate($value));
+    }
+
     public function testNilAndMaximumValuesRemainValid()
     {
         foreach (['00000000-0000-0000-0000-000000000000', 'ffffffff-ffff-ffff-ffff-ffffffffffff'] as $value) {

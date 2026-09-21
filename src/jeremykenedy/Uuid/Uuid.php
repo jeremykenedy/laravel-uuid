@@ -260,8 +260,6 @@ class Uuid
             return null;
         }
 
-        $str = (string) $str;
-
         if (strlen($str) === $len) {
             return $str;
         } else {
