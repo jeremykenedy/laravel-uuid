@@ -163,7 +163,7 @@ Legacy input handling is preserved: invalid imports have `null` bytes and the st
 | `node` | Version 1 node as 12 hexadecimal characters; otherwise `null` |
 | `time` | Version 1 Unix timestamp in seconds, including the fractional part; otherwise `null` |
 
-Casting a UUID to a string returns `string`. The existing public `bytes` and `string` properties remain writable, and serialization keeps the same property names.
+Casting a UUID to a string returns `string`. The existing public `bytes` and `string` properties remain writable, and serialization keeps the same property names. Subclasses can keep their existing storage visibility, and caller-added properties remain supported.
 
 ## Validation
 

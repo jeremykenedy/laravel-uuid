@@ -223,6 +223,39 @@ class UuidCompatibilityTest extends TestCase
         $this->assertInstanceOf($class, $class::import(Uuid::NS_DNS));
     }
 
+    public function testSubclassCanKeepProtectedStorageProperties()
+    {
+        $uuid = new class extends Uuid {
+            protected $bytes;
+
+            protected $string;
+
+            public function __construct()
+            {
+                parent::__construct(hex2bin(str_replace('-', '', Uuid::NS_DNS)));
+            }
+        };
+
+        $this->assertSame(Uuid::NS_DNS, $uuid->string);
+        $this->assertSame(Uuid::NS_DNS, (string) $uuid);
+        $this->assertSame(hex2bin(str_replace('-', '', Uuid::NS_DNS)), $uuid->bytes);
+    }
+
+    public function testCallerAddedPropertiesRemainSupportedWithoutDeprecations()
+    {
+        set_error_handler(function ($severity, $message, $file, $line) {
+            throw new ErrorException($message, 0, $severity, $file, $line);
+        });
+
+        try {
+            $uuid = Uuid::generate(4);
+            $uuid->label = 'external-id';
+            $this->assertSame('external-id', unserialize(serialize($uuid))->label);
+        } finally {
+            restore_error_handler();
+        }
+    }
+
     public function testTimeExtractionMatchesAKnownUuid()
     {
         $uuid = Uuid::import('f81d4fae-7dec-11d0-a765-00a0c91e6bf6');

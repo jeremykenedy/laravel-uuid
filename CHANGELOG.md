@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Declare the existing public UUID properties to prevent PHP 8.2 and later deprecation notices.
+- Allow dynamic UUID properties on PHP 8.2 and later without deprecation notices, preserving subclass storage and caller-added properties.
 - Handle null and unsupported input types without PHP warnings or type errors during validation and import.
 - Preserve the version 1 default, accepted import formats, public properties, serialization, namespace, alias, and PHP 7.0 minimum.
 - Keep the legacy invalid-import and invalid-comparison results.

@@ -16,12 +16,9 @@ use Exception;
  * @property string $variant
  * @property string $version
  */
+#[\AllowDynamicProperties]
 class Uuid
 {
-    public $bytes;
-
-    public $string;
-
     const MD5 = 3;
     const SHA1 = 5;
     /**
