@@ -76,7 +76,7 @@ jobs:
           extensions: mbstring, dom, xml, xmlwriter
           tools: composer:${{ matrix.composer }}
           coverage: none
-      - run: composer require --dev 'laravel/framework:${{ matrix.laravel }}' --prefer-dist --no-interaction
+      - run: composer require --dev 'laravel/framework:${{ matrix.laravel }}' --prefer-dist --no-interaction --no-plugins
       - run: composer test
       - run: vendor/bin/phpunit tests/Integration
 

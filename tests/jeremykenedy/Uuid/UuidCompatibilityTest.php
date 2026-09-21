@@ -223,6 +223,35 @@ class UuidCompatibilityTest extends TestCase
         $this->assertInstanceOf($class, $class::import(Uuid::NS_DNS));
     }
 
+    public function testTimeExtractionMatchesAKnownUuid()
+    {
+        $uuid = Uuid::import('f81d4fae-7dec-11d0-a765-00a0c91e6bf6');
+
+        $this->assertLessThan(0.000001, abs(854991792.216875 - $uuid->time));
+        $this->assertSame('00a0c91e6bf6', $uuid->node);
+    }
+
+    public function testExplicitMagicAccessStillReturnsPublicProperties()
+    {
+        $uuid = Uuid::import(Uuid::NS_DNS);
+
+        $this->assertSame($uuid->bytes, $uuid->__get('bytes'));
+        $this->assertSame($uuid->string, $uuid->__get('string'));
+    }
+
+    public function testSubclassConstructionRejectsNonBinaryLength()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Input must be a 128-bit integer.');
+
+        new class ('short') extends Uuid {
+            public function __construct($bytes)
+            {
+                parent::__construct($bytes);
+            }
+        };
+    }
+
     public function testPublicOperationsDoNotEmitPhpWarningsOrDeprecations()
     {
         set_error_handler(function ($severity, $message, $file, $line) {

@@ -187,7 +187,6 @@ class Uuid
      */
     protected static function mintTime($node = null)
     {
-
         /** Get time since Gregorian calendar reform in 100ns intervals
          * This is exceedingly difficult because of PHP's (and pack()'s)
          * integer size limits.
