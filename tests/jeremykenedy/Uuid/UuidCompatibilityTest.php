@@ -7,13 +7,16 @@ class UuidCompatibilityTest extends TestCase
 {
     public function testDefaultGenerationRemainsVersionOne()
     {
+        $before = microtime(true);
         $uuid = Uuid::generate();
+        $after = microtime(true);
 
         $this->assertSame(1, $uuid->version);
         $this->assertSame(1, $uuid->variant);
         $this->assertSame(16, strlen($uuid->bytes));
         $this->assertSame(1, hexdec(substr($uuid->node, 0, 2)) & 1);
-        $this->assertLessThan(2, abs(microtime(true) - $uuid->time));
+        $this->assertGreaterThanOrEqual($before - 0.00001, $uuid->time);
+        $this->assertLessThanOrEqual($after + 0.00001, $uuid->time);
     }
 
     public function testNameBasedGenerationMatchesPublishedVectors()
@@ -211,16 +214,13 @@ class UuidCompatibilityTest extends TestCase
 
     public function testSubclassFactoriesKeepLateStaticBinding()
     {
-        $prototype = new class (hex2bin(str_replace('-', '', Uuid::NS_DNS))) extends Uuid {
-            public function __construct($bytes)
-            {
-                parent::__construct($bytes);
-            }
-        };
-        $class = get_class($prototype);
+        $generated = InheritedUuid::generate(4);
+        $imported = InheritedUuid::import(Uuid::NS_DNS);
 
-        $this->assertInstanceOf($class, $class::generate(4));
-        $this->assertInstanceOf($class, $class::import(Uuid::NS_DNS));
+        $this->assertInstanceOf(InheritedUuid::class, $generated);
+        $this->assertSame(4, $generated->version);
+        $this->assertInstanceOf(InheritedUuid::class, $imported);
+        $this->assertSame(Uuid::NS_DNS, (string) $imported);
     }
 
     public function testSubclassCanKeepProtectedStorageProperties()
@@ -277,10 +277,10 @@ class UuidCompatibilityTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Input must be a 128-bit integer.');
 
-        new class ('short') extends Uuid {
-            public function __construct($bytes)
+        new class extends Uuid {
+            public function __construct()
             {
-                parent::__construct($bytes);
+                parent::__construct('short');
             }
         };
     }
@@ -305,4 +305,8 @@ class UuidCompatibilityTest extends TestCase
             restore_error_handler();
         }
     }
+}
+
+class InheritedUuid extends Uuid
+{
 }
