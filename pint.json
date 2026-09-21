@@ -1,0 +1,25 @@
+{
+    "preset": "psr12",
+    "rules": {
+        "braces_position": {
+            "allow_single_line_anonymous_functions": true,
+            "allow_single_line_empty_anonymous_classes": true
+        },
+        "concat_space": {
+            "spacing": "none"
+        },
+        "new_with_parentheses": {
+            "anonymous_class": false,
+            "named_class": false
+        },
+        "modifier_keywords": {
+            "elements": [
+                "property",
+                "method"
+            ]
+        }
+    },
+    "notPath": [
+        "vendor"
+    ]
+}

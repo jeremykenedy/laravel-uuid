@@ -1,24 +1,8 @@
-<?xml version="1.0"?>
-<phpunit backupGlobals="false"
-         backupStaticAttributes="false"
-         bootstrap="vendor/autoload.php"
-         colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
-         stopOnFailure="false">
-    <filter>
-        <whitelist addUncoveredFilesFromWhitelist="false">
-            <directory suffix=".php">./src</directory>
-        </whitelist>
-    </filter>
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="tests/bootstrap.php" colors="true" failOnWarning="true" failOnRisky="true">
     <testsuites>
-        <testsuite name="default">
-            <directory>./tests/</directory>
+        <testsuite name="unit">
+            <directory>tests/jeremykenedy</directory>
         </testsuite>
     </testsuites>
-    <logging>
-        <log type="coverage-clover" target="clover.xml"/>
-    </logging>
 </phpunit>

@@ -16,6 +16,7 @@ use Exception;
  * @property string $variant
  * @property string $version
  */
+#[\AllowDynamicProperties]
 class Uuid
 {
     const MD5 = 3;
@@ -134,6 +135,7 @@ class Uuid
         }
 
         $this->bytes = $uuid;
+        $uuid = (string) $uuid;
 
         // Optimize the most common use
         $this->string = bin2hex(substr($uuid, 0, 4)).'-'.
@@ -182,7 +184,6 @@ class Uuid
      */
     protected static function mintTime($node = null)
     {
-
         /** Get time since Gregorian calendar reform in 100ns intervals
          * This is exceedingly difficult because of PHP's (and pack()'s)
          * integer size limits.
@@ -255,6 +256,10 @@ class Uuid
         if ($str instanceof self) {
             return $str->bytes;
         }
+        if (!is_scalar($str) && !(is_object($str) && method_exists($str, '__toString'))) {
+            return null;
+        }
+
         if (strlen($str) === $len) {
             return $str;
         } else {
