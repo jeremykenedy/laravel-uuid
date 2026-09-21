@@ -1,0 +1,101 @@
+name: Tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  php:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { php: '7.0', composer: '2.2' }
+          - { php: '7.1', composer: '2.2' }
+          - { php: '7.2', composer: '2.2' }
+          - { php: '7.3', composer: '2.2' }
+          - { php: '7.4', composer: '2.2' }
+          - { php: '8.0', composer: '2.2' }
+          - { php: '8.1', composer: '2.2' }
+          - { php: '8.2', composer: '2' }
+          - { php: '8.3', composer: '2' }
+          - { php: '8.4', composer: '2' }
+          - { php: '8.5', composer: '2' }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: shivammathur/setup-php@b604ade2a87db23f8871b7182e69ec5e75effb45
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, dom, xml, xmlwriter
+          tools: composer:${{ matrix.composer }}
+          coverage: none
+      - run: composer validate --strict
+      - run: composer update --prefer-dist --no-interaction
+      - run: find src tests -name '*.php' -print0 | xargs -0 -n1 php -l
+      - run: composer test
+
+  laravel:
+    name: Laravel ${{ matrix.laravel }} / PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { laravel: '5.3.*', php: '7.0', composer: '2.2' }
+          - { laravel: '5.4.*', php: '7.0', composer: '2.2' }
+          - { laravel: '5.5.*', php: '7.0', composer: '2.2' }
+          - { laravel: '5.6.*', php: '7.2', composer: '2.2' }
+          - { laravel: '5.7.*', php: '7.2', composer: '2.2' }
+          - { laravel: '5.8.*', php: '7.3', composer: '2.2' }
+          - { laravel: '^6.0', php: '7.3', composer: '2.2' }
+          - { laravel: '^7.0', php: '7.3', composer: '2.2' }
+          - { laravel: '^8.0', php: '7.4', composer: '2.2' }
+          - { laravel: '^9.0', php: '8.1', composer: '2.2' }
+          - { laravel: '^10.0', php: '8.1', composer: '2.2' }
+          - { laravel: '^11.0', php: '8.2', composer: '2.2' }
+          - { laravel: '^12.0', php: '8.2', composer: '2' }
+          - { laravel: '^12.0', php: '8.5', composer: '2' }
+          - { laravel: '^13.0', php: '8.3', composer: '2' }
+          - { laravel: '^13.0', php: '8.5', composer: '2' }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: shivammathur/setup-php@b604ade2a87db23f8871b7182e69ec5e75effb45
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, dom, xml, xmlwriter
+          tools: composer:${{ matrix.composer }}
+          coverage: none
+      - run: composer require --dev 'laravel/framework:${{ matrix.laravel }}' --prefer-dist --no-interaction
+      - run: composer test
+      - run: vendor/bin/phpunit tests/Integration
+
+  quality:
+    name: Code style, coverage, and dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: shivammathur/setup-php@b604ade2a87db23f8871b7182e69ec5e75effb45
+        with:
+          php-version: '8.5'
+          tools: composer:2, pint
+          coverage: xdebug
+      - run: composer validate --strict
+      - run: composer require --dev 'laravel/framework:^13.0' --prefer-dist --no-interaction
+      - run: composer audit
+      - run: pint --test
+      - run: vendor/bin/phpunit tests --fail-on-deprecation --fail-on-notice --coverage-filter src --coverage-text --coverage-clover coverage/clover.xml
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: coverage
+          path: coverage/clover.xml

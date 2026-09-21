@@ -18,6 +18,10 @@ use Exception;
  */
 class Uuid
 {
+    public $bytes;
+
+    public $string;
+
     const MD5 = 3;
     const SHA1 = 5;
     /**
@@ -134,6 +138,7 @@ class Uuid
         }
 
         $this->bytes = $uuid;
+        $uuid = (string) $uuid;
 
         // Optimize the most common use
         $this->string = bin2hex(substr($uuid, 0, 4)).'-'.
@@ -255,6 +260,12 @@ class Uuid
         if ($str instanceof self) {
             return $str->bytes;
         }
+        if (!is_scalar($str) && !(is_object($str) && method_exists($str, '__toString'))) {
+            return null;
+        }
+
+        $str = (string) $str;
+
         if (strlen($str) === $len) {
             return $str;
         } else {

@@ -1,0 +1,15 @@
+preset: psr12
+
+risky: false
+
+disabled:
+  - const_visibility_required
+  - new_with_parentheses
+  - concat_with_spaces
+
+enabled:
+  - concat_without_spaces
+
+finder:
+  exclude:
+    - vendor

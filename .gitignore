@@ -56,3 +56,8 @@ storage/oauth-private.key
 storage/oauth-public.key
 **/storage/oauth-private.key
 **/storage/oauth-public.key
+/.phpunit.cache/
+/.phpunit.result.cache
+/.phpunit-watcher.yml
+/clover.xml
+/coverage/
