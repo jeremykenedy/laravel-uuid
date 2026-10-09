@@ -30,16 +30,16 @@ class UuidTest extends TestCase
     public function testGenerationOfValidUuidViaRegex()
     {
         $uuid = Uuid::generate(1);
-        $this->assertRegExp('~'.Uuid::VALID_UUID_REGEX.'~', (string) $uuid);
+        $this->assertSame(1, preg_match('~'.Uuid::VALID_UUID_REGEX.'~', (string) $uuid));
 
         $uuid = Uuid::generate(3, 'jeremykenedy.com', Uuid::NS_DNS);
-        $this->assertRegExp('~'.Uuid::VALID_UUID_REGEX.'~', (string) $uuid);
+        $this->assertSame(1, preg_match('~'.Uuid::VALID_UUID_REGEX.'~', (string) $uuid));
 
         $uuid = Uuid::generate(4);
-        $this->assertRegExp('~'.Uuid::VALID_UUID_REGEX.'~', (string) $uuid);
+        $this->assertSame(1, preg_match('~'.Uuid::VALID_UUID_REGEX.'~', (string) $uuid));
 
         $uuid = Uuid::generate(5, 'jeremykenedy.com', Uuid::NS_DNS);
-        $this->assertRegExp('~'.Uuid::VALID_UUID_REGEX.'~', (string) $uuid);
+        $this->assertSame(1, preg_match('~'.Uuid::VALID_UUID_REGEX.'~', (string) $uuid));
     }
 
     public function testGenerationOfValidUuidViaValidator()
@@ -140,7 +140,7 @@ class UuidTest extends TestCase
 
     public function testCorrectNodeOfGeneratedUuid()
     {
-        $macAdress = Faker\Provider\Internet::macAddress();
+        $macAdress = '00:11:22:33:44:55';
         $uuidThree = Uuid::generate(1, $macAdress);
         $this->assertEquals(strtolower(str_replace(':', '', $macAdress)), $uuidThree->node);
 

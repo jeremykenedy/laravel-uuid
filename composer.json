@@ -1,33 +1,32 @@
 {
-    "name" : "jeremykenedy/uuid",
-    "description" : "Laravel package to generate a UUID according to the RFC 4122 standard. UUID Versions 1, 3, 4 and 5 are supported. With MIT license.",
-    "authors" : [
+    "name": "jeremykenedy/uuid",
+    "description": "Laravel package to generate a UUID according to the RFC 4122 standard. UUID Versions 1, 3, 4 and 5 are supported. With MIT license.",
+    "authors": [
         {
-            "name" : "Christoph Kempen",
-            "email" : "christoph@downsized.nl"
+            "name": "Christoph Kempen",
+            "email": "christoph@downsized.nl"
         },
         {
-            "name" : "Jeremy Kenedy",
-            "email" : "jeremykenedy@gmail.com"
+            "name": "Jeremy Kenedy",
+            "email": "jeremykenedy@gmail.com"
         }
     ],
-    "keywords" : [
+    "keywords": [
         "UUID RFC4122"
     ],
-    "homepage" : "https://github.com/jeremykenedy/laravel-uuid",
-    "license" : [
+    "homepage": "https://github.com/jeremykenedy/laravel-uuid",
+    "license": [
         "MIT"
     ],
-    "require" : {
-        "php" : ">=7.0.0"
+    "require": {
+        "php": ">=7.0.0"
     },
-    "require-dev" : {
-      "phpunit/phpunit": "~6.0",
-      "fzaninotto/faker": "~1.4"
+    "require-dev": {
+        "phpunit/phpunit": "^6.5 || ^7.5 || ^8.5 || ^9.6 || ^10.5 || ^11.5 || ^12.5 || ^13.0"
     },
-    "autoload" : {
-        "psr-0" : {
-            "jeremykenedy\\Uuid" : "src/"
+    "autoload": {
+        "psr-0": {
+            "jeremykenedy\\Uuid": "src/"
         }
     },
     "extra": {
@@ -39,5 +38,8 @@
                 "Uuid": "jeremykenedy\\Uuid\\Uuid"
             }
         }
+    },
+    "scripts": {
+        "test": "phpunit"
     }
 }
